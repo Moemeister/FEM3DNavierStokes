@@ -284,7 +284,25 @@ Matrix createLocalK(int e,mesh &m){
 
 Vector createLocalb(int e,mesh &m){
     Vector b;
-    zeroes(b,12);
+    Vector f;
+    Vector temp_b;
+    Matrix e_star;
+    zeroes(f,3);
+    zeroes(temp_b,12);
+    calculateEStar(e_star);
+    float J = calculateLocalJ(e,m);
+    float D = calculateLocalD(e,m);
+    float f_x = m.getParameter(EXTERNAL_FORCE_X);
+    float f_y = m.getParameter(EXTERNAL_FORCE_Y);
+    float f_z = m.getParameter(EXTERNAL_FORCE_Z);
+    f.at(0) = f_x;
+    f.at(1) = f_y;
+    f.at(2) = f_z;
+
+    productMatrixVector(e_star,f,temp_b);
+    productRealVector(J/D,temp_b,b);
+    b.push_back(0); b.push_back(0); b.push_back(0);
+
     return b;
 }
 
