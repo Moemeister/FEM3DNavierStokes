@@ -64,20 +64,43 @@ float calculateMagnitude(float v1, float v2){
 }
 
 float calculateLocalVolume(int i,mesh m){
-    float V,A,s,a,b,c;
+    // float V,A,s,a,b,c;
+    // element e = m.getElement(i);
+    // node n1 = m.getNode(e.getNode1()-1);
+    // node n2 = m.getNode(e.getNode2()-1);
+    // node n3 = m.getNode(e.getNode3()-1);
+
+    // a = calculateMagnitude(n2.getX()-n1.getX(),n2.getY()-n1.getY());
+    // b = calculateMagnitude(n3.getX()-n2.getX(),n3.getY()-n2.getY());
+    // c = calculateMagnitude(n3.getX()-n1.getX(),n3.getY()-n1.getY());
+    // s = (a+b+c)/2;
+
+    // A = sqrt(s*(s-a)*(s-b)*(s-c));
+    // V = (sqrt(2)*A*A*A)/12;
+    // return V;
+    Vector row1, row2, row3;
+    Matrix matriz;
     element e = m.getElement(i);
+
     node n1 = m.getNode(e.getNode1()-1);
     node n2 = m.getNode(e.getNode2()-1);
     node n3 = m.getNode(e.getNode3()-1);
+    node n4 = m.getNode(e.getNode4()-1);
 
-    a = calculateMagnitude(n2.getX()-n1.getX(),n2.getY()-n1.getY());
-    b = calculateMagnitude(n3.getX()-n2.getX(),n3.getY()-n2.getY());
-    c = calculateMagnitude(n3.getX()-n1.getX(),n3.getY()-n1.getY());
-    s = (a+b+c)/2;
+    row1.push_back(n2.getX()-n1.getX());
+    row1.push_back(n2.getY()-n1.getY());
+    row1.push_back(n2.getZ()-n1.getZ());
 
-    A = sqrt(s*(s-a)*(s-b)*(s-c));
-    V = (sqrt(2)*A*A*A)/12;
-    return V;
+    row2.push_back(n3.getX()-n1.getX());
+    row2.push_back(n3.getY()-n1.getY());
+    row2.push_back(n3.getZ()-n1.getZ());
+
+    row3.push_back(n4.getX()-n1.getX());
+    row3.push_back(n4.getY()-n1.getY());
+    row3.push_back(n4.getZ()-n1.getZ());
+
+    matriz.push_back(row1); matriz.push_back(row2); matriz.push_back(row3);
+    return (abs(determinant(matriz))/6);
 }
 
 
