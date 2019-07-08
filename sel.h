@@ -275,6 +275,7 @@ Matrix createLocalK(int e,mesh &m){
     calculateB(B);
     //productRealMatrix(u_bar*J/D,productMatrixMatrix(e_star,productMatrixMatrix(A,B,2,2,6),6,2,6),alpha);
     productRealMatrix((u_bar*J)/D, productMatrixMatrix(productMatrixMatrix(e_star, A, 12, 3, 3), B, 12, 3, 12),alpha);
+    cout << "ALPHA";
 
     //Preparando beta
     nu = m.getParameter(DYNAMIC_VISCOSITY);
@@ -283,19 +284,19 @@ Matrix createLocalK(int e,mesh &m){
     transpose(B,Bt);
     //productRealMatrix(nu*Ve/(D*D),productMatrixMatrix(Bt,productMatrixMatrix(At,productMatrixMatrix(A,B,2,2,6),2,2,6),6,2,6),beta);
     productRealMatrix((nu*Ve)/(D*D), productMatrixMatrix(productMatrixMatrix(productMatrixMatrix(Bt, At, 12, 3, 3), A, 12, 3, 3), B, 12, 3, 12),beta);
-
+    cout << "BETA";
     //Preparando gamma
     rho = m.getParameter(DENSITY);
     calculateC(C);
     //productRealMatrix(J/(rho*D),productMatrixMatrix(e_star,productMatrixMatrix(A,C,2,2,3),6,2,3),gamma);
     productRealMatrix(J/(rho*D), productMatrixMatrix(productMatrixMatrix(e_star, A, 12, 3, 3), C, 12, 3, 4),gamma);
-
+    cout << "GAMMA";
     //Preparando delta
     transpose(C,Ct);
     transpose(e_star,e_star_t);
     //productRealMatrix(J/D,productMatrixMatrix(Ct,productMatrixMatrix(At,e_star_t,2,2,6),3,2,6),delta);
     productRealMatrix(J/D,productMatrixMatrix(productMatrixMatrix(Ct, At, 4, 3, 3), e_star_t, 4, 3, 12),delta);
-
+    cout << "DELTA";
     //Colocando submatrices en K
     zeroes(K,16);
     ubicarSubMatriz(K,0,11,0,11,sumMatrix(alpha,beta,12,12));
@@ -324,7 +325,7 @@ Vector createLocalb(int e,mesh &m){
 
     productMatrixVector(e_star,f,temp_b);
     productRealVector(J/D,temp_b,b);
-    b.push_back(0); b.push_back(0); b.push_back(0);
+    b.push_back(0); b.push_back(0); b.push_back(0);b.push_back(0);
 
     return b;
 }
@@ -642,10 +643,10 @@ void assemblyb(element e,Vector localb,Vector &b,int nnodes){
     int index10 = index2+2*nnodes;
     int index11 = index3+2*nnodes;
     int index12 = index4+2*nnodes;
-    int index13 = index1+3*nnodes;
-    int index14 = index2+3*nnodes;
-    int index15 = index3+3*nnodes;
-    int index16 = index4+3*nnodes;
+    // int index13 = index1+3*nnodes;
+    // int index14 = index2+3*nnodes;
+    // int index15 = index3+3*nnodes;
+    // int index16 = index4+3*nnodes;
 
     b.at(index1) += localb.at(0);
     b.at(index2) += localb.at(1);
@@ -659,10 +660,10 @@ void assemblyb(element e,Vector localb,Vector &b,int nnodes){
     b.at(index10) += localb.at(9);
     b.at(index11) += localb.at(10);
     b.at(index12) += localb.at(11);
-    b.at(index13) += localb.at(12);
-    b.at(index14) += localb.at(13);
-    b.at(index15) += localb.at(14);
-    b.at(index16) += localb.at(15);
+    // b.at(index13) += localb.at(12);
+    // b.at(index14) += localb.at(13);
+    // b.at(index15) += localb.at(14);
+    // b.at(index16) += localb.at(15);
 }
 
 void ensamblaje(mesh &m,vector<Matrix> &localKs,vector<Vector> &localbs,Matrix &K,Vector &b){
